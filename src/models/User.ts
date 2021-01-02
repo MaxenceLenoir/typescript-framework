@@ -1,38 +1,32 @@
-interface UserProps {
+import { Eventing } from './Eventing';
+import { Sync } from './Sync';
+import { Attributes } from './Attributes';
+export interface UserProps {
+    id?: number;
     name?: string;
     age?: number;
 }
 
-type Callback = () => void;
-
+const rootUrl = 'http://localhost:3000/users';
 export class User {
 
-  events: { [key: string]: Callback[] } = {}
+  public events: Eventing = new Eventing();
+  public sync: Sync<UserProps> = new Sync<UserProps>(rootUrl); 
+  public attributes: Attributes<UserProps>;
 
-  constructor(private data: UserProps){}
-
-  get(propName: string): string | number{
-    return this.data[propName];
+  constructor(attrs: UserProps){
+    this.attributes = new Attributes<UserProps>(attrs);
   }
 
-  set(updateProps: UserProps): void{
-    Object.assign(this.data, updateProps);
+  get on() {
+    return this.events.on;
   }
 
-  on(eventName: string, callback: Callback): void{
-    const handlers = this.events[eventName] || [];
-    handlers.push(callback);
-    this.events[eventName] = handlers;
+  get trigger() {
+    return this.events.trigger;
   }
 
-  trigger(eventName: string): void{
-    const handlers = this.events[eventName]
-    if (!handlers || handlers.length === 0){
-      return;
-    }
-    handlers.forEach(callback => {
-      callback();
-    })
+  get get() {
+    return this.attributes.get;
   }
-
 }
