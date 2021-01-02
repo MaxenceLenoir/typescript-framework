@@ -3,12 +3,11 @@
     {
       "id": 1,
       "name": "Max",
-      "age": 22
+      "age": 27
     },
     {
-      "name": "NewUser",
-      "age": 35,
-      "id": 2
+      "id": 2,
+      "name": "NewerName"
     },
     {
       "name": "NewUser",
